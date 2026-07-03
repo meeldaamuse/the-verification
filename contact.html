@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact — NVA</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="noise"></div>
+  <div class="page">
+    <header class="topbar">
+      <a class="brand" href="index.html"><div class="logo-box">TV</div><div class="logo-text">THE VERIFICATION<span>_</span></div></a>
+      <nav class="nav"><a href="about.html">About</a><a href="process.html">Process</a><a href="rights.html">The Rights</a><a href="result.html">Results</a><a class="active" href="contact.html">Contact</a><a class="cta" href="check.html">Check Result</a></nav>
+    </header>
+
+    <main class="shell grid-layout">
+      <section class="panel page-title">
+        <div class="kicker">NVA Contact Unit</div>
+        <h1>Contact</h1>
+        <p class="copy">For questions regarding your classification, please remain patient. Appeals are currently unavailable.</p>
+      </section>
+      <section class="panel content-section">
+        <form class="check-form" onsubmit="event.preventDefault(); alert('MESSAGE ARCHIVED. RESPONSE TIME: INDEFINITE.');">
+          <input placeholder="CASE ID" />
+          <input placeholder="SUBJECT NAME" />
+          <textarea placeholder="MESSAGE"></textarea>
+          <button class="primary" type="submit">Archive Message</button>
+        </form>
+      </section>
+    </main>
+
+    <section class="shell panel content-section" style="margin-top:18px;"><div class="notice">Response time: indefinite. Please do not submit duplicate reports. Duplicate reports may be interpreted as instability.</div></section>
+
+    <footer class="footer"><span>Truth. Order. Security.</span><span>© NVA all rights reserved</span><span>NVA.GOV.VR</span></footer>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>

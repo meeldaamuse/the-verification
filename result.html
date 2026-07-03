@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Result — NVA</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="loading" id="loading"><div class="loader-box"><div class="loader-text glitch">ACCESSING VERIFICATION FILE...</div><div class="loader-bar"><div class="loader-progress"></div></div></div></div>
+  <div class="noise"></div>
+  <div class="page">
+    <header class="topbar">
+      <a class="brand" href="index.html"><div class="logo-box">TV</div><div class="logo-text">THE VERIFICATION<span>_</span></div></a>
+      <nav class="nav"><a href="about.html">About</a><a href="process.html">Process</a><a href="rights.html">The Rights</a><a class="active" href="result.html">Results</a><a href="contact.html">Contact</a><a class="cta" href="check.html">Check Result</a></nav>
+    </header>
+
+    <main class="shell result-layout">
+      <section class="panel content-section">
+        <div class="kicker">Your Verification Result</div>
+        <div class="case-line"><div>Case ID: <strong id="caseId">TV-2099-8473</strong></div><div>Date: <strong id="date">--</strong></div></div>
+        <div class="divider"></div>
+        <div class="score-block">
+          <div class="score-box"><div class="metric-title">Overall Score</div><div class="score-number" id="score">87</div><div class="score-total">/100</div></div>
+          <div><div class="metric-title">Final Status</div><div class="status-value status-approved" id="status">APPROVED</div><p class="copy" id="statusText">Social access maintained.</p></div>
+        </div>
+        <div class="metrics">
+          <div class="metric"><div class="metric-title">Truth Consistency</div><div class="metric-value" id="truth">87%</div><div class="bar"><div class="bar-fill" id="truthBar" style="--value:87%"></div></div></div>
+          <div class="metric"><div class="metric-title">Social Alignment</div><div class="metric-value" id="social">92%</div><div class="bar"><div class="bar-fill" id="socialBar" style="--value:92%"></div></div></div>
+          <div class="metric"><div class="metric-title">Compliance Rate</div><div class="metric-value" id="compliance">89%</div><div class="bar"><div class="bar-fill" id="complianceBar" style="--value:89%"></div></div></div>
+          <div class="metric"><div class="metric-title">Emotional Deviation</div><div class="metric-value" id="emotional">23%</div><div class="bar"><div class="bar-fill" id="emotionalBar" style="--value:23%"></div></div></div>
+          <div class="metric"><div class="metric-title">Risk Class</div><div class="metric-value" id="risk">LOW</div></div>
+        </div>
+        <div class="button-row"><button onclick="window.print()">Download Report</button><a class="button" href="check.html">Check Another ID</a></div>
+      </section>
+
+      <aside class="panel content-section">
+        <div class="kicker">Detected Behavioral Patterns</div>
+        <div class="face-scan" style="margin: 0 auto 34px; width:min(260px,90%);"><span class="scan-cross"></span><span class="scan-cross"></span><span class="scan-cross"></span><span class="scan-cross"></span></div>
+        <div class="logs" id="logs"></div>
+      </aside>
+    </main>
+
+    <footer class="footer"><span>Truth. Order. Security.</span><span>© NVA all rights reserved</span><span>NVA.GOV.VR</span></footer>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>

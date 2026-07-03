@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Check Result — NVA</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="noise"></div>
+  <div class="page">
+    <header class="topbar">
+      <a class="brand" href="index.html"><div class="logo-box">TV</div><div class="logo-text">THE VERIFICATION<span>_</span></div></a>
+      <nav class="nav"><a href="about.html">About</a><a href="process.html">Process</a><a href="rights.html">The Rights</a><a href="result.html">Results</a><a href="contact.html">Contact</a><a class="cta active" href="check.html">Check Result</a></nav>
+    </header>
+
+    <main class="shell grid-layout">
+      <section class="panel page-title">
+        <div class="kicker">Result Access</div>
+        <h1>Your Result Awaits You</h1>
+        <p class="copy">Scan the mark or enter your assigned case ID. Do not share your result file with unauthorized citizens.</p>
+      </section>
+      <section class="panel content-section">
+        <form class="check-form" id="checkForm">
+          <label for="caseInput" class="kicker">Enter Case ID</label>
+          <input id="caseInput" name="case" placeholder="TV-2099-8473" autocomplete="off" />
+          <label for="statusSelect" class="kicker">Demo Status</label>
+          <select id="statusSelect" style="min-height:54px;border:1px solid var(--line-purple);background:#050505;color:var(--white);font-family:var(--font);letter-spacing:.12em;padding:0 16px;">
+            <option value="">Auto by Case ID</option>
+            <option value="approved">Approved</option>
+            <option value="limited">Limited Access</option>
+            <option value="failed">Non-Citizen</option>
+          </select>
+          <button class="primary" type="submit">Access File</button>
+        </form>
+      </section>
+    </main>
+
+    <footer class="footer"><span>Truth. Order. Security.</span><span>© NVA all rights reserved</span><span>NVA.GOV.VR</span></footer>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
