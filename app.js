@@ -79,6 +79,11 @@ function fillResultPage() {
   const statusParam = params.get("status");
   const result = chooseResult(caseId, statusParam);
 
+  document.body.classList.remove("status-approved", "status-limited", "status-failed");
+  if (result.statusClass) {
+    document.body.classList.add(result.statusClass);
+  }
+
   const setText = (id, value) => {
     const el = document.getElementById(id);
     if (el) el.textContent = value;
