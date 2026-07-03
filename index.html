@@ -4,92 +4,743 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NVA Result Portal</title>
+
   <style>
+    :root {
+      --black: #0a0a0a;
+      --dark: #111111;
+      --dark-2: #181818;
+      --gray: #5c5c63;
+      --light-gray: #c5c6c3;
+      --white: #e6e6e6;
+      --purple: #8a5cff;
+      --purple-soft: rgba(138, 92, 255, 0.35);
+      --green: #5cff9d;
+      --blue: #4f8cff;
+      --red: #ff4b6a;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
     body {
       margin: 0;
-      background: #0a0a0a;
-      color: #e6e6e6;
-      font-family: monospace;
+      min-height: 100%;
+      background: var(--black);
+      color: var(--white);
+      font-family: "IBM Plex Mono", "Courier New", monospace;
       letter-spacing: 0.12em;
+      overflow-x: hidden;
+    }
+
+    body {
       min-height: 100vh;
+      background:
+        radial-gradient(circle at 80% 20%, rgba(138, 92, 255, 0.16), transparent 28%),
+        radial-gradient(circle at 20% 80%, rgba(138, 92, 255, 0.08), transparent 24%),
+        #050505;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 48px 48px;
+      opacity: 0.35;
+      mask-image: radial-gradient(circle at center, black, transparent 75%);
+      z-index: 1;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(255,255,255,0.035) 0,
+        rgba(255,255,255,0.035) 1px,
+        transparent 1px,
+        transparent 4px
+      );
+      mix-blend-mode: screen;
+      opacity: 0.12;
+      z-index: 20;
+    }
+
+    .page {
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+      padding: 24px;
+    }
+
+    .topbar {
+      width: min(1180px, 100%);
+      margin: 0 auto 32px;
+      border: 1px solid rgba(138, 92, 255, 0.28);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 18px;
+      background: rgba(12, 12, 12, 0.72);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 40px rgba(138, 92, 255, 0.08);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--purple);
+      font-size: 13px;
+      text-transform: uppercase;
+    }
+
+    .mark {
+      width: 28px;
+      height: 28px;
+      border: 1px solid var(--purple);
+      display: grid;
+      place-items: center;
+      font-size: 12px;
+      box-shadow: 0 0 18px rgba(138, 92, 255, 0.35);
+    }
+
+    .nav {
+      display: flex;
+      gap: 22px;
+      font-size: 10px;
+      color: var(--light-gray);
+      text-transform: uppercase;
+    }
+
+    .nav span:last-child {
+      color: var(--purple);
+    }
+
+    .layout {
+      width: min(1180px, 100%);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 18px;
+    }
+
+    .panel {
+      border: 1px solid rgba(138, 92, 255, 0.32);
+      background:
+        linear-gradient(180deg, rgba(24, 24, 24, 0.92), rgba(7, 7, 7, 0.96));
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.025) inset,
+        0 0 50px rgba(138, 92, 255, 0.08);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(138, 92, 255, 0.08), transparent 32%);
+      pointer-events: none;
+    }
+
+    .hero {
+      padding: 42px;
+      min-height: 520px;
+    }
+
+    .section-label {
+      color: var(--purple);
+      font-size: 12px;
+      text-transform: uppercase;
+      margin-bottom: 22px;
+    }
+
+    h1 {
+      margin: 0 0 28px;
+      font-weight: 400;
+      font-size: clamp(30px, 5vw, 62px);
+      line-height: 1.05;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .subtitle {
+      max-width: 640px;
+      color: var(--light-gray);
+      font-size: 13px;
+      line-height: 1.8;
+      margin-bottom: 34px;
+      letter-spacing: 0.08em;
+    }
+
+    .divider {
+      height: 1px;
+      background: rgba(255,255,255,0.13);
+      margin: 28px 0;
+    }
+
+    .case-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+      font-size: 13px;
+      color: var(--light-gray);
+      text-transform: uppercase;
+    }
+
+    .case-row strong {
+      color: var(--white);
+      font-weight: 400;
+    }
+
+    .score-wrap {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 28px;
+      align-items: end;
+      margin: 38px 0 28px;
+    }
+
+    .score-box {
+      border: 1px solid rgba(138, 92, 255, 0.28);
+      padding: 26px;
+      background: rgba(0, 0, 0, 0.25);
+    }
+
+    .score-number {
+      color: var(--purple);
+      font-size: 88px;
+      line-height: 0.9;
+      letter-spacing: 0.02em;
+      text-shadow: 0 0 26px rgba(138, 92, 255, 0.35);
+    }
+
+    .score-total {
+      margin-top: 12px;
+      color: var(--light-gray);
+      font-size: 13px;
+    }
+
+    .status-big {
+      border-left: 1px solid rgba(255,255,255,0.12);
+      padding-left: 24px;
+    }
+
+    .status-label {
+      font-size: 11px;
+      color: var(--gray);
+      margin-bottom: 10px;
+    }
+
+    .status-value {
+      font-size: clamp(24px, 4vw, 42px);
+      text-transform: uppercase;
+      line-height: 1.1;
+    }
+
+    .status-approved {
+      color: var(--green);
+    }
+
+    .status-limited {
+      color: var(--blue);
+    }
+
+    .status-failed {
+      color: var(--red);
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      margin-top: 26px;
+    }
+
+    .metric {
+      border: 1px solid rgba(255,255,255,0.12);
+      padding: 16px;
+      background: rgba(0,0,0,0.22);
+    }
+
+    .metric-title {
+      font-size: 10px;
+      color: var(--gray);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+
+    .metric-value {
+      font-size: 22px;
+      color: var(--white);
+    }
+
+    .bar {
+      height: 7px;
+      margin-top: 12px;
+      background: rgba(255,255,255,0.08);
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      width: var(--value);
+      background: var(--purple);
+      box-shadow: 0 0 18px rgba(138, 92, 255, 0.5);
+    }
+
+    .side {
+      display: grid;
+      gap: 18px;
+    }
+
+    .face-panel {
+      min-height: 250px;
+      padding: 26px;
       display: grid;
       place-items: center;
     }
 
-    .portal {
-      width: min(90vw, 520px);
-      border: 1px solid #8a5cff;
-      padding: 32px;
-      box-shadow: 0 0 30px rgba(138, 92, 255, 0.25);
-      background: linear-gradient(180deg, #111 0%, #050505 100%);
+    .face {
+      width: min(240px, 80%);
+      aspect-ratio: 1;
+      border: 1px solid rgba(138, 92, 255, 0.32);
+      border-radius: 50%;
+      position: relative;
+      background:
+        radial-gradient(circle, rgba(138,92,255,0.12), transparent 62%),
+        linear-gradient(rgba(138,92,255,0.15) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(138,92,255,0.15) 1px, transparent 1px);
+      background-size: auto, 22px 22px, 22px 22px;
+      box-shadow: 0 0 48px rgba(138, 92, 255, 0.18);
     }
 
-    .label {
-      color: #8a5cff;
-      font-size: 12px;
-      margin-bottom: 24px;
+    .face::before,
+    .face::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      border: 1px solid rgba(138, 92, 255, 0.35);
+      border-radius: 50%;
     }
 
-    h1 {
-      font-size: 28px;
-      line-height: 1.3;
-      margin: 0 0 24px;
-      font-weight: 400;
+    .face::before {
+      width: 58%;
+      height: 78%;
     }
 
-    .score {
-      font-size: 72px;
-      color: #8a5cff;
-      margin: 24px 0 8px;
+    .face::after {
+      width: 28%;
+      height: 18%;
+      border-radius: 4px;
+      top: 58%;
     }
 
-    .line {
-      border-top: 1px solid #333;
-      margin: 24px 0;
+    .log-panel {
+      padding: 26px;
     }
 
-    .data {
+    .logs {
       display: grid;
       gap: 12px;
-      font-size: 14px;
+      margin-top: 18px;
     }
 
-    .status {
-      color: #4f8cff;
+    .log {
+      display: flex;
+      gap: 10px;
+      font-size: 11px;
+      line-height: 1.6;
+      color: var(--light-gray);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      padding-bottom: 10px;
+    }
+
+    .log span {
+      color: var(--purple);
+    }
+
+    .action-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 28px;
+      flex-wrap: wrap;
+    }
+
+    button,
+    .fake-button {
+      border: 1px solid var(--purple);
+      background: rgba(138, 92, 255, 0.14);
+      color: var(--white);
+      padding: 13px 18px;
+      font-family: inherit;
+      letter-spacing: inherit;
+      font-size: 11px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    button:hover,
+    .fake-button:hover {
+      background: rgba(138, 92, 255, 0.35);
+      box-shadow: 0 0 24px rgba(138, 92, 255, 0.24);
+    }
+
+    .footer {
+      width: min(1180px, 100%);
+      margin: 18px auto 0;
+      border-top: 1px solid rgba(255,255,255,0.12);
+      padding-top: 16px;
+      color: var(--gray);
+      font-size: 10px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      text-transform: uppercase;
+    }
+
+    .loading {
+      position: fixed;
+      inset: 0;
+      background: #050505;
+      z-index: 100;
+      display: grid;
+      place-items: center;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
+
+    .loading.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .loader-box {
+      width: min(520px, 86vw);
+      border: 1px solid rgba(138, 92, 255, 0.4);
+      padding: 28px;
+      background: rgba(10,10,10,0.95);
+      box-shadow: 0 0 60px rgba(138, 92, 255, 0.14);
+    }
+
+    .loader-text {
+      color: var(--purple);
+      font-size: 13px;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+    }
+
+    .loader-bar {
+      height: 8px;
+      background: rgba(255,255,255,0.08);
+      overflow: hidden;
+    }
+
+    .loader-progress {
+      height: 100%;
+      width: 0%;
+      background: var(--purple);
+      animation: load 2.2s ease forwards;
+      box-shadow: 0 0 18px rgba(138, 92, 255, 0.6);
+    }
+
+    @keyframes load {
+      0% { width: 0%; }
+      25% { width: 33%; }
+      62% { width: 67%; }
+      100% { width: 100%; }
+    }
+
+    .glitch {
+      animation: glitch 2.5s infinite;
+    }
+
+    @keyframes glitch {
+      0%, 88%, 100% { transform: translate(0); opacity: 1; }
+      90% { transform: translate(2px, -1px); opacity: 0.85; }
+      92% { transform: translate(-2px, 1px); opacity: 1; }
+      94% { transform: translate(1px, 2px); opacity: 0.8; }
+    }
+
+    @media (max-width: 860px) {
+      .page {
+        padding: 14px;
+      }
+
+      .topbar {
+        margin-bottom: 14px;
+      }
+
+      .nav {
+        display: none;
+      }
+
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding: 24px;
+        min-height: auto;
+      }
+
+      .score-wrap {
+        grid-template-columns: 1fr;
+      }
+
+      .status-big {
+        border-left: 0;
+        border-top: 1px solid rgba(255,255,255,0.12);
+        padding-left: 0;
+        padding-top: 20px;
+      }
+
+      .metrics {
+        grid-template-columns: 1fr;
+      }
+
+      .score-number {
+        font-size: 76px;
+      }
     }
   </style>
 </head>
+
 <body>
-  <main class="portal">
-    <div class="label">NATIONAL VERIFICATION AUTHORITY</div>
-    <h1>YOUR VERIFICATION RESULT</h1>
-
-    <div class="line"></div>
-
-    <div class="data">
-      <div>CASE ID: <span id="caseId">TV-2099-8473</span></div>
-      <div>TRUTH INDEX</div>
+  <div class="loading" id="loading">
+    <div class="loader-box">
+      <div class="loader-text glitch">ACCESSING VERIFICATION FILE...</div>
+      <div class="loader-bar">
+        <div class="loader-progress"></div>
+      </div>
     </div>
+  </div>
 
-    <div class="score">87</div>
-    <div>/100</div>
+  <div class="page">
+    <header class="topbar">
+      <div class="brand">
+        <div class="mark">NVA</div>
+        <span>NATIONAL VERIFICATION AUTHORITY</span>
+      </div>
 
-    <div class="line"></div>
+      <nav class="nav">
+        <span>ABOUT</span>
+        <span>PROCESS</span>
+        <span>YOUR RIGHTS</span>
+        <span>RESULTS</span>
+        <span>CHECK RESULT</span>
+      </nav>
+    </header>
 
-    <div class="data">
-      <div>STATUS: <span class="status">APPROVED</span></div>
-      <div>RISK CLASS: LOW</div>
-      <div>COMPLIANCE: HIGH</div>
-    </div>
-  </main>
+    <main class="layout">
+      <section class="panel hero">
+        <div class="section-label">PERSONAL EVALUATION REPORT</div>
+
+        <h1 class="glitch">YOUR VERIFICATION RESULT</h1>
+
+        <p class="subtitle">
+          The National Verification Authority has completed your annual citizen assessment.
+          Your behavioral pattern has been processed and archived.
+        </p>
+
+        <div class="divider"></div>
+
+        <div class="case-row">
+          <div>CASE ID: <strong id="caseId">TV-2099-8473</strong></div>
+          <div>DATE: <strong id="date"></strong></div>
+        </div>
+
+        <div class="score-wrap">
+          <div class="score-box">
+            <div class="metric-title">OVERALL SCORE</div>
+            <div class="score-number" id="score">87</div>
+            <div class="score-total">/100</div>
+          </div>
+
+          <div class="status-big">
+            <div class="status-label">FINAL STATUS</div>
+            <div class="status-value status-approved" id="status">APPROVED</div>
+            <p class="subtitle" id="statusText">
+              Social access maintained. No immediate correction required.
+            </p>
+          </div>
+        </div>
+
+        <div class="metrics">
+          <div class="metric">
+            <div class="metric-title">Truth Consistency</div>
+            <div class="metric-value" id="truth">87%</div>
+            <div class="bar"><div class="bar-fill" id="truthBar" style="--value: 87%;"></div></div>
+          </div>
+
+          <div class="metric">
+            <div class="metric-title">Social Alignment</div>
+            <div class="metric-value" id="social">92%</div>
+            <div class="bar"><div class="bar-fill" id="socialBar" style="--value: 92%;"></div></div>
+          </div>
+
+          <div class="metric">
+            <div class="metric-title">Compliance Rate</div>
+            <div class="metric-value" id="compliance">89%</div>
+            <div class="bar"><div class="bar-fill" id="complianceBar" style="--value: 89%;"></div></div>
+          </div>
+
+          <div class="metric">
+            <div class="metric-title">Risk Class</div>
+            <div class="metric-value" id="risk">LOW</div>
+          </div>
+        </div>
+
+        <div class="action-row">
+          <button onclick="window.print()">DOWNLOAD REPORT</button>
+          <button onclick="location.reload()">RE-SCAN FILE</button>
+        </div>
+      </section>
+
+      <aside class="side">
+        <section class="panel face-panel">
+          <div class="face"></div>
+        </section>
+
+        <section class="panel log-panel">
+          <div class="section-label">DETECTED BEHAVIORAL PATTERNS</div>
+
+          <div class="logs" id="logs">
+            <div class="log"><span>01</span> Response hesitation within acceptable range.</div>
+            <div class="log"><span>02</span> Emotional deviation minimal.</div>
+            <div class="log"><span>03</span> Compliance pattern stable.</div>
+            <div class="log"><span>04</span> Verification result archived.</div>
+          </div>
+        </section>
+      </aside>
+    </main>
+
+    <footer class="footer">
+      <span>TRUTH. ORDER. SECURITY.</span>
+      <span>© NVA ALL RIGHTS RESERVED</span>
+      <span>NVA.GOV.VR</span>
+    </footer>
+  </div>
 
   <script>
-    const params = new URLSearchParams(window.location.search);
-    const id = params.get("id");
+    const demoResults = {
+      approved: {
+        score: 87,
+        status: "APPROVED",
+        statusClass: "status-approved",
+        statusText: "Social access maintained. No immediate correction required.",
+        truth: 87,
+        social: 92,
+        compliance: 89,
+        risk: "LOW",
+        logs: [
+          "Response hesitation within acceptable range.",
+          "Emotional deviation minimal.",
+          "Compliance pattern stable.",
+          "Verification result archived."
+        ]
+      },
+      limited: {
+        score: 64,
+        status: "LIMITED ACCESS",
+        statusClass: "status-limited",
+        statusText: "Social access reduced. Increased monitoring may apply.",
+        truth: 64,
+        social: 58,
+        compliance: 61,
+        risk: "MONITORED",
+        logs: [
+          "Response hesitation detected.",
+          "Truth consistency unstable.",
+          "Compliance fluctuation observed.",
+          "Subject marked for passive monitoring."
+        ]
+      },
+      failed: {
+        score: 23,
+        status: "NON-CITIZEN",
+        statusClass: "status-failed",
+        statusText: "Social access removed. Correction protocol has been initiated.",
+        truth: 23,
+        social: 19,
+        compliance: 31,
+        risk: "CRITICAL",
+        logs: [
+          "Severe behavioral irregularity registered.",
+          "Truth consistency critically failed.",
+          "System alignment rejected.",
+          "Correction protocol initiated."
+        ]
+      }
+    };
 
-    if (id) {
-      document.getElementById("caseId").textContent = id;
+    const params = new URLSearchParams(window.location.search);
+
+    const caseId = params.get("id") || "TV-2099-8473";
+    const statusParam = params.get("status");
+
+    function chooseResult(id) {
+      if (statusParam === "approved") return demoResults.approved;
+      if (statusParam === "limited") return demoResults.limited;
+      if (statusParam === "failed" || statusParam === "noncitizen") return demoResults.failed;
+
+      const lastNumber = parseInt(id.replace(/\D/g, "").slice(-1), 10);
+
+      if ([0, 1, 2].includes(lastNumber)) return demoResults.failed;
+      if ([3, 4, 5, 6].includes(lastNumber)) return demoResults.limited;
+      return demoResults.approved;
     }
+
+    const result = chooseResult(caseId);
+
+    document.getElementById("caseId").textContent = caseId;
+
+    const today = new Date();
+    document.getElementById("date").textContent = today.toLocaleDateString("de-DE");
+
+    document.getElementById("score").textContent = result.score;
+
+    const statusElement = document.getElementById("status");
+    statusElement.textContent = result.status;
+    statusElement.className = "status-value " + result.statusClass;
+
+    document.getElementById("statusText").textContent = result.statusText;
+
+    document.getElementById("truth").textContent = result.truth + "%";
+    document.getElementById("social").textContent = result.social + "%";
+    document.getElementById("compliance").textContent = result.compliance + "%";
+    document.getElementById("risk").textContent = result.risk;
+
+    document.getElementById("truthBar").style.setProperty("--value", result.truth + "%");
+    document.getElementById("socialBar").style.setProperty("--value", result.social + "%");
+    document.getElementById("complianceBar").style.setProperty("--value", result.compliance + "%");
+
+    const logs = document.getElementById("logs");
+    logs.innerHTML = "";
+
+    result.logs.forEach((log, index) => {
+      const item = document.createElement("div");
+      item.className = "log";
+      item.innerHTML = `<span>${String(index + 1).padStart(2, "0")}</span> ${log}`;
+      logs.appendChild(item);
+    });
+
+    setTimeout(() => {
+      document.getElementById("loading").classList.add("hidden");
+    }, 2400);
   </script>
 </body>
 </html>
